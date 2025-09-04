@@ -1,6 +1,7 @@
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/CaixaEletronicoApplication.java
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/config/DataInitializer.java
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/controller/CaixaController.java
+/workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/excpetion/SaldoInsuficienteException.java
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/model/Conta.java
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/repository/ContaRepository.java
 /workspaces/caixa-eletronico-java/src/main/java/com/caixa/caixa_eletronico/service/CaixaService.java

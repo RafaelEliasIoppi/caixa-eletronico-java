@@ -1,9 +1,12 @@
 package com.caixa.caixa_eletronico.service;
 
+
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.caixa.caixa_eletronico.excpetion.SaldoInsuficienteException;
 import com.caixa.caixa_eletronico.model.Conta;
 import com.caixa.caixa_eletronico.repository.ContaRepository;
 
@@ -39,16 +42,18 @@ public class CaixaService {
         contaRepository.deleteById(id);
     }
 
-    // Realizar saque
-    public Double sacar(Long id, Double valor) {
-        Conta conta = buscarPorId(id);
-        if (conta.getSaldo() < valor) {
-            throw new RuntimeException("Saldo insuficiente");
-        }
-        conta.setSaldo(conta.getSaldo() - valor);
-        contaRepository.save(conta);
-        return conta.getSaldo();
+  public Double sacar(Long id, Double valor) {
+    Conta conta = buscarPorId(id);
+
+    if (conta.getSaldo() < valor) {
+        throw new SaldoInsuficienteException(conta.getSaldo(), valor);
     }
+
+    conta.setSaldo(conta.getSaldo() - valor);
+    contaRepository.save(conta);
+    return conta.getSaldo();
+}
+ 
 
     // Realizar depósito
     public Double depositar(Long id, Double valor) {
