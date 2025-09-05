@@ -4,12 +4,70 @@
   <meta charset="UTF-8">
   <title>Caixa Eletrônico</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    input, button { margin: 5px; padding: 8px; }
-    .section { margin-bottom: 30px; }
-    .erro { color: red; }
-    .sucesso { color: green; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .limpar {
+      background-color: #e74c3c;
+    }
+
+    .limpar:hover {
+      background-color: #c0392b;
+    }
+
+    .sucesso {
+      color: green;
+      margin-top: 10px;
+    }
+
+    .erro {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .resultado {
+      margin-top: 10px;
+    }
   </style>
+  <script>
+    function limparResultados() {
+      document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
+    }
+  </script>
 </head>
 <body>
   <h1>💳 Caixa Eletrônico</h1>
@@ -20,10 +78,14 @@
       <h2>🔍 Consultar Saldo</h2>
       <input type="number" name="consultaId" placeholder="ID da Conta" required>
       <button type="submit">Consultar</button>
+      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
-    <div th:if="${conta != null}" class="sucesso">
+    <div th:if="${conta != null}" class="resultado sucesso">
       <p>Titular: <span th:text="${conta.titular}"></span></p>
       <p>Saldo: R$ <span th:text="${conta.saldo}"></span></p>
+    </div>
+    <div th:if="${erroConsulta != null}" class="erro">
+      <p th:text="${erroConsulta}"></p>
     </div>
   </div>
 
@@ -34,10 +96,14 @@
       <input type="number" name="depositoId" placeholder="ID da Conta" required>
       <input type="number" name="valor" placeholder="Valor do Depósito" step="0.01" min="0.01" required>
       <button type="submit">Depositar</button>
+      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
-    <div th:if="${depositoId != null}" class="sucesso">
+    <div th:if="${depositoId != null}" class="resultado sucesso">
       <p>Depósito realizado na conta <span th:text="${depositoId}"></span>.</p>
       <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
+    </div>
+    <div th:if="${erroDeposito != null}" class="erro">
+      <p th:text="${erroDeposito}"></p>
     </div>
   </div>
 
@@ -48,16 +114,15 @@
       <input type="number" name="saqueId" placeholder="ID da Conta" required>
       <input type="number" name="valor" placeholder="Valor do Saque" step="0.01" min="0.01" required>
       <button type="submit">Sacar</button>
+      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
-    <div th:if="${saqueId != null}" class="sucesso">
+    <div th:if="${saqueId != null}" class="resultado sucesso">
       <p>Saque realizado na conta <span th:text="${saqueId}"></span>.</p>
       <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
     </div>
-  </div>
-
-  <!-- ⚠️ Erros -->
-  <div th:if="${erro != null}" class="erro">
-    <p th:text="${erro}"></p>
+    <div th:if="${erroSaque != null}" class="erro">
+      <p th:text="${erroSaque}"></p>
+    </div>
   </div>
 </body>
 </html>
