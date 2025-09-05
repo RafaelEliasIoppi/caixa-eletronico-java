@@ -2,6 +2,8 @@ package com.caixa.caixa_eletronico.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +27,43 @@ public class CaixaViewController {
         return "index";
     }
 
-    // 🔍 Consultar saldo
-   @GetMapping("/consultar")
+    @GetMapping("/cadastro")
+    public String mostrarFormularioCadastro() {
+        return "cadastro"; // Isso renderiza cadastro.html
+}
+
+@GetMapping("/listar")
+public String listarContas(Model model) {
+    List<Conta> contas = caixaService.listarTodas();
+    model.addAttribute("todasContas", contas);
+    return "index";
+}
+
+@PostMapping("/criar")
+public String criarConta(@RequestParam String titular,
+                         @RequestParam Double valor,
+                         Model model) {
+    try {
+        if (valor == null || valor < 0) {
+            throw new IllegalArgumentException("Valor inicial inválido");
+        }
+
+        Conta novaConta = new Conta();
+        novaConta.setTitular(titular);
+        novaConta.setSaldo(valor);
+
+        Conta contaCriada = caixaService.criarConta(novaConta);
+        model.addAttribute("contaCriada", contaCriada);
+    } catch (IllegalArgumentException e) {
+        model.addAttribute("erroCriacao", e.getMessage());
+    } catch (Exception e) {
+        model.addAttribute("erroCriacao", "Erro ao criar conta");
+    }
+    return "index";
+}
+
+// 🔍 Consultar saldo
+@GetMapping("/consultar")
 public String consultar(@RequestParam Long consultaId, Model model) {
     try {
         Conta conta = caixaService.buscarPorId(consultaId);
