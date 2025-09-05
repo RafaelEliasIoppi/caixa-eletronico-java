@@ -16,6 +16,31 @@
       color: #2c3e50;
     }
 
+    .mensagem-central {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #2ecc71;
+      color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-size: 18px;
+      z-index: 9999;
+      text-align: center;
+}
+
+.mensagem-central {
+  animation: fadeInOut 3s ease-in-out forwards;
+}
+
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
     .section {
       background-color: #fff;
       padding: 20px;
@@ -65,7 +90,6 @@
     
   </style>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
   <script>
     function limparResultados() {
       document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
@@ -87,109 +111,117 @@
           }
         });
       }
-  </script>
+
+       setTimeout(() => {
+        const msg = document.querySelector('.mensagem-central');
+        if (msg) msg.style.display = 'none';
+      }, 3000); // 3 segundos
+</script>
 </head>
 <body>
   <h1>💳 Caixa Eletrônico</h1>
 
   <div style="text-align: center; margin-bottom: 30px;">
-  <form th:action="@{/cadastro}" method="get">
-    <button type="submit" style="background-color: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-      ➕ Ir para Cadastro de Conta
-    </button>
-  </form>
-</div>
-
-<div style="text-align: center; margin-bottom: 30px;">
-  <form th:action="@{/listar}" method="get">
-    <button type="submit" style="background-color: #8e44ad; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-      📋 Consultar Todas as Contas
-    </button>
-  </form>
-</div>
-  <!-- 🔍 Consultar Conta -->
-  <div class="section">
-    <form th:action="@{/consultar}" method="get">
-      <h2>🔍 Consultar Saldo</h2>
-      <input type="number" name="consultaId" placeholder="ID da Conta" required>
-      <button type="submit">Consultar</button>
-      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
+    <form th:action="@{/cadastro}" method="get">
+      <button type="submit" style="background-color: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+        ➕ Ir para Cadastro de Conta
+      </button>
     </form>
-    <div th:if="${conta != null}" class="resultado sucesso">
-      <p>Titular: <span th:text="${conta.titular}"></span></p>
-      <p>Saldo: R$ <span th:text="${conta.saldo}"></span></p>
-    </div>
-    <div th:if="${erroConsulta != null}" class="erro">
-      <p th:text="${erroConsulta}"></p>
-    </div>
   </div>
 
-  <!-- 💰 Depósito -->
-  <div class="section">
-    <form th:action="@{/depositar}" method="post">
-      <h2>💰 Realizar Depósito</h2>
-      <input type="number" name="depositoId" placeholder="ID da Conta" required>
-      <input type="number" name="valor" placeholder="Valor do Depósito" step="0.01" min="0.01" required>
-      <button type="submit">Depositar</button>
-      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
-    </form>
-    <div th:if="${depositoId != null}" class="resultado sucesso">
-      <p>Depósito realizado na conta <span th:text="${depositoId}"></span>.</p>
-      <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
-    </div>
-    <div th:if="${erroDeposito != null}" class="erro">
-      <p th:text="${erroDeposito}"></p>
-    </div>
+  <div style="text-align: center; margin-bottom: 30px;">
+      <form th:action="@{/listar}" method="get">
+        <button type="submit" style="background-color: #8e44ad; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+          📋 Consultar Todas as Contas
+        </button>
+      </form>
   </div>
-
-  <!-- 💸 Saque -->
+      <!-- 🔍 Consultar Conta -->
   <div class="section">
-    <form th:action="@{/sacar}" method="post">
-      <h2>💸 Realizar Saque</h2>
-      <input type="number" name="saqueId" placeholder="ID da Conta" required>
-      <input type="number" name="valor" placeholder="Valor do Saque" step="0.01" min="0.01" required>
-      <button type="submit">Sacar</button>
-      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
-    </form>
-    <div th:if="${saqueId != null}" class="resultado sucesso">
-      <p>Saque realizado na conta <span th:text="${saqueId}"></span>.</p>
-      <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
-    </div>
-    <div th:if="${erroSaque != null}" class="erro">
-      <p th:text="${erroSaque}"></p>
-    </div>
-  </div>
-
-
-    <div class="section" th:if="${todasContas != null}">
-    <h2>📋 Todas as Contas</h2>
-    <table style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #ecf0f1;">
-      <th style="padding: 8px; border: 1px solid #ccc;">ID</th>
-      <th style="padding: 8px; border: 1px solid #ccc;">Titular</th>
-      <th style="padding: 8px; border: 1px solid #ccc;">Saldo</th>
-      <th style="padding: 8px; border: 1px solid #ccc;">Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="conta : ${todasContas}">
-      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.id}"></td>
-      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.titular}"></td>
-      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.saldo}"></td>
-      <td style="padding: 8px; border: 1px solid #ccc;">
-        <form th:action="@{/excluir}" method="post" style="display:inline;">
-          <input type="hidden" name="id" th:value="${conta.id}" />
-          <button type="button"
-                  onclick="confirmarExclusao(this.form)"
-                  style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
-            🗑️ Excluir
-          </button>
+        <form th:action="@{/consultar}" method="get">
+          <h2>🔍 Consultar Saldo</h2>
+          <input type="number" name="consultaId" placeholder="ID da Conta" required>
+          <button type="submit">Consultar</button>
+          <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
         </form>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <div th:if="${conta != null}" class="resultado sucesso">
+          <p>Titular: <span th:text="${conta.titular}"></span></p>
+          <p>Saldo: R$ <span th:text="${conta.saldo}"></span></p>
+        </div>
+        <div th:if="${erroConsulta != null}" class="erro">
+          <p th:text="${erroConsulta}"></p>
+        </div>
+  </div>
+
+     <!-- 💰 Depósito -->
+  <div class="section">
+        <form th:action="@{/depositar}" method="post">
+          <h2>💰 Realizar Depósito</h2>
+          <input type="number" name="depositoId" placeholder="ID da Conta" required>
+          <input type="number" name="valor" placeholder="Valor do Depósito" step="0.01" min="0.01" required>
+          <button type="submit">Depositar</button>
+          <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
+        </form>
+        <div th:if="${depositoId != null}" class="resultado sucesso">
+          <p>Depósito realizado na conta <span th:text="${depositoId}"></span>.</p>
+          <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
+        </div>
+        <div th:if="${erroDeposito != null}" class="erro">
+          <p th:text="${erroDeposito}"></p>
+        </div>
+  </div>
+
+      <!-- 💸 Saque -->
+  <div class="section">
+        <form th:action="@{/sacar}" method="post">
+          <h2>💸 Realizar Saque</h2>
+          <input type="number" name="saqueId" placeholder="ID da Conta" required>
+          <input type="number" name="valor" placeholder="Valor do Saque" step="0.01" min="0.01" required>
+          <button type="submit">Sacar</button>
+          <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
+        </form>
+        <div th:if="${saqueId != null}" class="resultado sucesso">
+          <p>Saque realizado na conta <span th:text="${saqueId}"></span>.</p>
+          <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
+        </div>
+        <div th:if="${erroSaque != null}" class="erro">
+          <p th:text="${erroSaque}"></p>
+        </div>
+  </div>
+
+
+  <div class="section" th:if="${todasContas != null}">
+  <h2>📋 Todas as Contas</h2>
+  <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background-color: #ecf0f1;">
+          <th style="padding: 8px; border: 1px solid #ccc;">ID</th>
+          <th style="padding: 8px; border: 1px solid #ccc;">Titular</th>
+          <th style="padding: 8px; border: 1px solid #ccc;">Saldo</th>
+          <th style="padding: 8px; border: 1px solid #ccc;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="conta : ${todasContas}">
+          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.id}"></td>
+          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.titular}"></td>
+          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.saldo}"></td>
+          <td style="padding: 8px; border: 1px solid #ccc;">
+            <form th:action="@{/excluir}" method="post" style="display:inline;">
+              <input type="hidden" name="id" th:value="${conta.id}" />
+              <button type="button"
+                      onclick="confirmarExclusao(this.form)"
+                      style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                🗑️ Excluir
+              </button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+<div th:if="${mensagem != null}" class="mensagem-central">
+  <p th:text="${mensagem}"></p>
+</div>
   </div>
 
 </body>
