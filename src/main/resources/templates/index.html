@@ -62,15 +62,31 @@
     .resultado {
       margin-top: 10px;
     }
+    
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
     function limparResultados() {
       document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
     }
 
-    function confirmarExclusao() {
-    return confirm("Tem certeza que deseja excluir esta conta?");
-  }
+     function confirmarExclusao(form) {
+        Swal.fire({
+          title: 'Tem certeza?',
+          text: 'Essa ação excluirá a conta permanentemente.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#e74c3c',
+          cancelButtonColor: '#aaa',
+          confirmButtonText: 'Sim, excluir!',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      }
   </script>
 </head>
 <body>
@@ -164,11 +180,11 @@
       <td style="padding: 8px; border: 1px solid #ccc;">
         <form th:action="@{/excluir}" method="post" style="display:inline;">
           <input type="hidden" name="id" th:value="${conta.id}" />
-          <button type="submit"
-        onclick="return confirmarExclusao()"
-                style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
-          🗑️ Excluir
-        </button>
+          <button type="button"
+                  onclick="confirmarExclusao(this.form)"
+                  style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            🗑️ Excluir
+          </button>
         </form>
       </td>
     </tr>
