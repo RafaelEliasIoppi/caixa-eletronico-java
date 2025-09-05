@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Caixa Eletrônico</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    input, button { margin: 5px; padding: 8px; }
+    .section { margin-bottom: 30px; }
+    .erro { color: red; }
+    .sucesso { color: green; }
+  </style>
+</head>
+<body>
+  <h1>💳 Caixa Eletrônico</h1>
+
+  <!-- 🔍 Consultar Conta -->
+  <div class="section">
+    <form th:action="@{/consultar}" method="get">
+      <h2>🔍 Consultar Saldo</h2>
+      <input type="number" name="consultaId" placeholder="ID da Conta" required>
+      <button type="submit">Consultar</button>
+    </form>
+    <div th:if="${conta != null}" class="sucesso">
+      <p>Titular: <span th:text="${conta.titular}"></span></p>
+      <p>Saldo: R$ <span th:text="${conta.saldo}"></span></p>
+    </div>
+  </div>
+
+  <!-- 💰 Depósito -->
+  <div class="section">
+    <form th:action="@{/depositar}" method="post">
+      <h2>💰 Realizar Depósito</h2>
+      <input type="number" name="depositoId" placeholder="ID da Conta" required>
+      <input type="number" name="valor" placeholder="Valor do Depósito" step="0.01" min="0.01" required>
+      <button type="submit">Depositar</button>
+    </form>
+    <div th:if="${depositoId != null}" class="sucesso">
+      <p>Depósito realizado na conta <span th:text="${depositoId}"></span>.</p>
+      <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
+    </div>
+  </div>
+
+  <!-- 💸 Saque -->
+  <div class="section">
+    <form th:action="@{/sacar}" method="post">
+      <h2>💸 Realizar Saque</h2>
+      <input type="number" name="saqueId" placeholder="ID da Conta" required>
+      <input type="number" name="valor" placeholder="Valor do Saque" step="0.01" min="0.01" required>
+      <button type="submit">Sacar</button>
+    </form>
+    <div th:if="${saqueId != null}" class="sucesso">
+      <p>Saque realizado na conta <span th:text="${saqueId}"></span>.</p>
+      <p>Novo saldo: R$ <span th:text="${novoSaldo}"></span></p>
+    </div>
+  </div>
+
+  <!-- ⚠️ Erros -->
+  <div th:if="${erro != null}" class="erro">
+    <p th:text="${erro}"></p>
+  </div>
+</body>
+</html>
