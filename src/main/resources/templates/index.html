@@ -67,6 +67,10 @@
     function limparResultados() {
       document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
     }
+
+    function confirmarExclusao() {
+    return confirm("Tem certeza que deseja excluir esta conta?");
+  }
   </script>
 </head>
 <body>
@@ -144,21 +148,32 @@
     <div class="section" th:if="${todasContas != null}">
     <h2>📋 Todas as Contas</h2>
     <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="background-color: #ecf0f1;">
-          <th style="padding: 8px; border: 1px solid #ccc;">ID</th>
-          <th style="padding: 8px; border: 1px solid #ccc;">Titular</th>
-          <th style="padding: 8px; border: 1px solid #ccc;">Saldo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="conta : ${todasContas}">
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.id}"></td>
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.titular}"></td>
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.saldo}"></td>
-        </tr>
-      </tbody>
-    </table>
+  <thead>
+    <tr style="background-color: #ecf0f1;">
+      <th style="padding: 8px; border: 1px solid #ccc;">ID</th>
+      <th style="padding: 8px; border: 1px solid #ccc;">Titular</th>
+      <th style="padding: 8px; border: 1px solid #ccc;">Saldo</th>
+      <th style="padding: 8px; border: 1px solid #ccc;">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="conta : ${todasContas}">
+      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.id}"></td>
+      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.titular}"></td>
+      <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.saldo}"></td>
+      <td style="padding: 8px; border: 1px solid #ccc;">
+        <form th:action="@{/excluir}" method="post" style="display:inline;">
+          <input type="hidden" name="id" th:value="${conta.id}" />
+          <button type="submit"
+        onclick="return confirmarExclusao()"
+                style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+          🗑️ Excluir
+        </button>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
   </div>
 
 </body>
