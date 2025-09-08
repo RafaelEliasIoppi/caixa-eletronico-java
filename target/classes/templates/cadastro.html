@@ -71,29 +71,29 @@ src/main/resources/templates/index.html<!DOCTYPE html>
 </head>
 <body>
   <h1>💳 Caixa Eletrônico</h1>
-  <div class="section">
-    <form th:action="@{/criar}" method="post">
-      <h2>💰 Cadastrar Conta</h2>
-      <input type="text" name="titular" placeholder="Titular da Conta" required>
-      <input type="number" name="valor" placeholder="Valor Inicial" step="0.01" min="0.0" required>
-      <button type="submit">Cadastrar</button>
-      <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
-    </form>
+<div class="section">
+  <form th:action="@{/criar}" method="post">
+    <h2>💰 Cadastrar Conta</h2>
+    <input type="text" name="titular" placeholder="Titular da Conta" required>
+    <input type="number" name="valor" placeholder="Valor Inicial" step="0.01" min="0.0" required>
+    <input type="password" name="senha" placeholder="Senha numérica (4 a 6 dígitos)" pattern="\d{4,6}" required>
+    <button type="submit">Cadastrar</button>
+    <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
+  </form>
 
-    <!-- ✅ Sucesso na criação -->
-    <div th:if="${contaCriada != null}" class="resultado sucesso">
-      <p>Conta criada com sucesso!</p>
-      <p>ID: <span th:text="${contaCriada.id}"></span></p>
-      <p>Titular: <span th:text="${contaCriada.titular}"></span></p>
-      <p>Saldo inicial: R$ <span th:text="${contaCriada.saldo}"></span></p>
+  <!-- ✅ Sucesso na criação -->
+  <div th:if="${contaCriada != null}" class="resultado sucesso">
+    <p>Conta criada com sucesso!</p>
+    <p>ID: <span th:text="${contaCriada.id}"></span></p>
+    <p>Titular: <span th:text="${contaCriada.titular}"></span></p>
+    <p>Saldo inicial: R$ <span th:text="${contaCriada.saldo}"></span></p>
+  </div>
+
+  <!-- ⚠️ Erro na criação -->
+  <div th:if="${erroCriacao != null}" class="erro">
+    <p th:text="${erroCriacao}"></p>
+  </div>
     </div>
-
-    <!-- ⚠️ Erro na criação -->
-    <div th:if="${erroCriacao != null}" class="erro">
-      <p th:text="${erroCriacao}"></p>
-    </div>
-</div>
-
   </div>
 
  

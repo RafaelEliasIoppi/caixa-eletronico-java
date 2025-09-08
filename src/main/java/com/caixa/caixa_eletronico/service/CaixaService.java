@@ -23,6 +23,21 @@ public class CaixaService {
             .orElseThrow(() -> new RuntimeException("Conta não encontrada para o ID: " + id));
     }
 
+    // Autenticar por ID e senha
+    public Conta autenticarPorId(Long id, String senha) {
+        Conta conta = buscarPorId(id);
+        if (!conta.getSenha().equals(senha)) {
+            throw new RuntimeException("Senha incorreta para a conta ID: " + id);
+        }
+        return conta;
+    }
+
+    // Autenticar por titular e senha
+    public Conta autenticar(String titular, String senha) {
+        return contaRepository.findByTitularAndSenha(titular, senha)
+            .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
+    }
+
     // Listar todas as contas
     public List<Conta> listarTodas() {
         return contaRepository.findAll();
@@ -33,6 +48,9 @@ public class CaixaService {
         conta.setId(null); // Garante que será criada uma nova conta
         if (conta.getTitular() == null || conta.getTitular().isBlank()) {
             throw new IllegalArgumentException("Titular não pode ser vazio");
+        }
+        if (conta.getSenha() == null || !conta.getSenha().matches("\\d{4,6}")) {
+            throw new IllegalArgumentException("Senha deve conter entre 4 e 6 dígitos numéricos");
         }
         if (conta.getSaldo() == null) {
             conta.setSaldo(0.0);
@@ -59,14 +77,14 @@ public class CaixaService {
         contaRepository.deleteById(id);
     }
 
-    // Realizar saque com controle de concorrência
+    // Realizar saque com autenticação
     @Transactional
-    public Double sacar(Long id, Double valor) {
+    public Double sacar(Long id, Double valor, String senha) {
         if (valor == null || valor <= 0) {
             throw new IllegalArgumentException("Valor inválido para saque");
         }
 
-        Conta conta = buscarPorId(id);
+        Conta conta = autenticarPorId(id, senha);
 
         if (conta.getSaldo() == null) {
             throw new RuntimeException("Saldo da conta está nulo");
@@ -80,14 +98,14 @@ public class CaixaService {
         return contaRepository.save(conta).getSaldo();
     }
 
-    // Realizar depósito com controle de concorrência
+    // Realizar depósito com autenticação
     @Transactional
-    public Double depositar(Long id, Double valor) {
+    public Double depositar(Long id, Double valor, String senha) {
         if (valor == null || valor <= 0) {
             throw new IllegalArgumentException("Valor inválido para depósito");
         }
 
-        Conta conta = buscarPorId(id);
+        Conta conta = autenticarPorId(id, senha);
 
         if (conta.getSaldo() == null) {
             conta.setSaldo(0.0);
@@ -95,5 +113,10 @@ public class CaixaService {
 
         conta.setSaldo(conta.getSaldo() + valor);
         return contaRepository.save(conta).getSaldo();
+    }
+
+    // Consultar saldo com autenticação
+    public Conta consultarComSenha(Long id, String senha) {
+        return autenticarPorId(id, senha);
     }
 }

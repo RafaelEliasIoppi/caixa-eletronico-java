@@ -22,6 +22,9 @@ public class Conta {
     @Column(nullable = false)
     private Double saldo = 0.0;
 
+    @Column(nullable = false, length = 6) // exemplo: senha de até 6 dígitos
+    private String senha;
+
     @Version
     private Long versao;
 }

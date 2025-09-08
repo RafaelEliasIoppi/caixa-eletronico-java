@@ -20,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
             Conta conta = new Conta();
             conta.setTitular("João da Silva");
             conta.setSaldo(1000.0);
+            conta.setSenha("123456");
             contaRepository.save(conta);
 
             System.out.println("✅ Conta inicial criada: João da Silva com R$ 1000.00");
