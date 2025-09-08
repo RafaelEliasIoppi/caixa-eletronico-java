@@ -80,7 +80,7 @@ public String criarConta(@RequestParam String titular,
     } catch (Exception e) {
         model.addAttribute("erroCriacao", "Erro ao criar conta");
     }
-    return "index";
+    return "cadastro";
 }
 
 

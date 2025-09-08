@@ -61,7 +61,17 @@ src/main/resources/templates/index.html<!DOCTYPE html>
 
     .resultado {
       margin-top: 10px;
+    
     }
+
+    .mensagem-sucesso {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e6ffed;
+  border: 1px solid #2ecc71;
+  border-radius: 8px;
+  color: #2c3e50;
+}
   </style>
   <script>
   function limparResultados() {
@@ -80,15 +90,17 @@ src/main/resources/templates/index.html<!DOCTYPE html>
     <button type="submit">Cadastrar</button>
     <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
   </form>
-
-  <!-- ✅ Sucesso na criação -->
-  <div th:if="${contaCriada != null}" class="resultado sucesso">
-    <p>Conta criada com sucesso!</p>
-    <p>ID: <span th:text="${contaCriada.id}"></span></p>
-    <p>Titular: <span th:text="${contaCriada.titular}"></span></p>
-    <p>Saldo inicial: R$ <span th:text="${contaCriada.saldo}"></span></p>
-  </div>
-
+<div th:if="${contaCriada != null}" class="mensagem-sucesso">
+  <h3>✅ Conta cadastrada com sucesso!</h3>
+  <p><strong>ID:</strong> <span th:text="${contaCriada.id}"></span></p>
+  <p><strong>Titular:</strong> <span th:text="${contaCriada.titular}"></span></p>
+  <p><strong>Saldo inicial:</strong> R$ <span th:text="${contaCriada.saldo}"></span></p>
+  <script>
+    setTimeout(function() {
+      window.location.href = '/'; // ou '/index' dependendo da sua rota
+    }, 5000); // 5000 milissegundos = 5 segundos
+  </script>
+</div>
   <!-- ⚠️ Erro na criação -->
   <div th:if="${erroCriacao != null}" class="erro">
     <p th:text="${erroCriacao}"></p>
@@ -96,7 +108,6 @@ src/main/resources/templates/index.html<!DOCTYPE html>
     </div>
   </div>
 
- 
   
   </div>
 </body>
