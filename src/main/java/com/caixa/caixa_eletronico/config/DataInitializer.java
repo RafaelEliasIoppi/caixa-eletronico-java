@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
             conta.setSenha("123456");
             contaRepository.save(conta);
 
-            System.out.println("✅ Conta inicial criada: João da Silva com R$ 1000.00");
+            System.out.println("✅ Conta inicial criada: João da Silva com R$ 1000.00 - Senha 123456");
         }
     }
 }
