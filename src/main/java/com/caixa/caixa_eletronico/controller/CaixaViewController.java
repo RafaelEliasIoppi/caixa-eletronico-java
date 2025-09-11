@@ -84,8 +84,8 @@ public String criarConta(@RequestParam String titular,
 }
 
 
-    // 🔍 Consultar saldo
-   @GetMapping("/consultar")
+// 🔍 Consultar saldo via POST
+@PostMapping("/consultar")
 public String consultar(@RequestParam Long consultaId,
                         @RequestParam String senha,
                         Model model) {

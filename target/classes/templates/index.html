@@ -136,7 +136,7 @@
 
   <!-- Consultar Saldo -->
   <div class="section">
-    <form th:action="@{/consultar}" method="get">
+    <form th:action="@{/consultar}" method="post">
       <h2>🔍 Consultar Saldo</h2>
       <input type="number" name="consultaId" placeholder="ID da Conta" required>
       <input type="password" name="senha" placeholder="Senha da Conta" required>
