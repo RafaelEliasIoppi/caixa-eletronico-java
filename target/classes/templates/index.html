@@ -85,35 +85,131 @@
     .resultado {
       margin-top: 10px;
     }
+  .dashboard-graficos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.grafico-container {
+  flex: 1 1 400px;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script>
-    function limparResultados() {
-      document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
-    }
+  function limparResultados() {
+    document.querySelectorAll('.resultado, .sucesso, .erro').forEach(el => el.innerHTML = '');
+  }
 
-    function confirmarExclusao(form) {
-      Swal.fire({
-        title: 'Tem certeza?',
-        text: 'Essa ação excluirá a conta permanentemente.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#e74c3c',
-        cancelButtonColor: '#aaa',
-        confirmButtonText: 'Sim, excluir!',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          form.submit();
-        }
-      });
-    }
+  function confirmarExclusao(form) {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Essa ação excluirá a conta permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();
+      }
+    });
+  }
 
-    setTimeout(() => {
-      const msg = document.querySelector('.mensagem-central');
-      if (msg) msg.style.display = 'none';
-    }, 3000);
-  </script>
+  setTimeout(() => {
+    const msg = document.querySelector('.mensagem-central');
+    if (msg) msg.style.display = 'none';
+  }, 3000);
+</script>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  window.addEventListener('DOMContentLoaded', () => {
+    const contas = /*[[${todasContas}]]*/ [];
+
+    if (Array.isArray(contas) && contas.length > 0) {
+      const labels = contas.map(c => c.titular);
+      const saldos = contas.map(c => c.saldo);
+      const depositos = contas.map(c => c.totalDepositos || 0);
+      const saques = contas.map(c => c.totalSaques || 0);
+
+      const ctxBarra = document.getElementById('graficoBarras');
+      const ctxPizza = document.getElementById('graficoPizza');
+
+      if (ctxBarra && ctxPizza) {
+        new Chart(ctxBarra, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'Saldo', data: saldos, backgroundColor: '#2ecc71' },
+              { label: 'Depósitos', data: depositos, backgroundColor: '#3498db' },
+              { label: 'Saques', data: saques, backgroundColor: '#e74c3c' }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Movimentações por Conta'
+              }
+            }
+          }
+        });
+
+        new Chart(ctxPizza, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Distribuição de Saldos',
+              data: saldos,
+              backgroundColor: ['#1abc9c', '#9b59b6', '#f39c12', '#e74c3c', '#3498db']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Proporção de Saldos entre Contas'
+              }
+            }
+          }
+        });
+      } else {
+        console.warn("Canvas não encontrado para os gráficos.");
+      }
+    } else {
+      console.warn("Nenhuma conta disponível para gerar gráficos.");
+    }
+  });
+  /*]]>*/
+</script>
+
+
 </head>
 <body>
   <h1>💳 Caixa Eletrônico</h1>
@@ -122,7 +218,7 @@
 
    <a href="/cadastro">
     <button>➕ Criar Nova Conta</button>
-    </a>
+   </a>
 
 
   <!-- Consultar Todas -->
@@ -139,7 +235,7 @@
     <form th:action="@{/consultar}" method="post">
       <h2>🔍 Consultar Saldo</h2>
       <input type="number" name="consultaId" placeholder="ID da Conta" required>
-      <input type="password" name="senha" placeholder="Senha da Conta" required>
+      <input type="password" name="senha" placeholder="Senha da Conta 🔒" required>
       <button type="submit">Consultar</button>
       <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
@@ -158,7 +254,7 @@
       <h2>💰 Realizar Depósito</h2>
       <input type="number" name="depositoId" placeholder="ID da Conta" required>
       <input type="number" name="valor" placeholder="Valor do Depósito" step="0.01" min="0.01" required>
-      <input type="password" name="senha" placeholder="Senha da Conta" required>
+      <input type="password" name="senha" placeholder="Senha da Conta 🔒" required>
       <button type="submit">Depositar</button>
       <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
@@ -177,7 +273,7 @@
       <h2>💸 Realizar Saque</h2>
       <input type="number" name="saqueId" placeholder="ID da Conta" required>
       <input type="number" name="valor" placeholder="Valor do Saque" step="0.01" min="0.01" required>
-      <input type="password" name="senha" placeholder="Senha da Conta" required>
+      <input type="password" name="senha" placeholder="Senha da Conta 🔒" required>
       <button type="submit">Sacar</button>
       <button type="button" class="limpar" onclick="limparResultados()">Limpar</button>
     </form>
@@ -192,7 +288,8 @@
 
   <!-- Todas as Contas + Exclusão -->
   <div class="section" th:if="${todasContas != null}">
-    <h2>📋 Todas as Contas – Recurso didático para análise e compreensão global das contas cadastradas.</h2>
+    <h2>📋 Todas as Contas</h2>
+    <p class="descricao">Visualização geral para fins didáticos e análise do sistema.</p>
     <table style="width: 100%; border-collapse: collapse;">
   <thead>
     <tr style="background-color: #ecf0f1;">
@@ -230,6 +327,21 @@
       <p th:text="${erro}"></p>
     </div>
   </div>
+<div class="section" th:if="${todasContas != null}">
+  <h2>📊 Dashboard Financeiro</h2>
+  <p class="descricao">Visualização gráfica dos saldos, depósitos e saques por conta.</p>
+
+  <div class="dashboard-graficos">
+    <div class="grafico-container">
+      <canvas id="graficoBarras"></canvas>
+    </div>
+    <div class="grafico-container">
+      <canvas id="graficoPizza"></canvas>
+    </div>
+  </div>
+</div>
+
+
 
 </body>
 </html>

@@ -49,10 +49,10 @@ public String autenticar(@RequestParam String titular,
 
     @GetMapping("/listar")
     public String listarContas(Model model) {
-        List<Conta> contas = caixaService.listarTodas();
-        model.addAttribute("todasContas", contas);
-        return "index";
-    }
+    List<Conta> contas = caixaService.listarTodasComTotais(); // ✅ usa os totais de movimentações
+    model.addAttribute("todasContas", contas);
+    return "index";
+}
 
     @PostMapping("/criar")
 public String criarConta(@RequestParam String titular,

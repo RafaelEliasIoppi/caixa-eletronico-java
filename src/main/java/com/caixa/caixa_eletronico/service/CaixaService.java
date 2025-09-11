@@ -1,5 +1,6 @@
 package com.caixa.caixa_eletronico.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -7,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.caixa.caixa_eletronico.excpetion.SaldoInsuficienteException;
 import com.caixa.caixa_eletronico.model.Conta;
+import com.caixa.caixa_eletronico.model.Movimentacao;
 import com.caixa.caixa_eletronico.repository.ContaRepository;
+import com.caixa.caixa_eletronico.repository.MovimentacaoRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 public class CaixaService {
 
     private final ContaRepository contaRepository;
+    private final MovimentacaoRepository movimentacaoRepository;
+
 
     // Buscar conta por ID
     public Conta buscarPorId(Long id) {
@@ -93,30 +98,76 @@ public class CaixaService {
         if (conta.getSaldo() < valor) {
             throw new SaldoInsuficienteException(conta.getSaldo(), valor);
         }
-
         conta.setSaldo(conta.getSaldo() - valor);
-        return contaRepository.save(conta).getSaldo();
-    }
+        contaRepository.save(conta);
+
+        // ✅ Inserir movimentação sem alterar a lógica principal
+        Movimentacao movimentacao = new Movimentacao();
+        movimentacao.setConta(conta);
+        movimentacao.setValor(valor);
+        movimentacao.setTipo("SAQUE");
+        movimentacao.setDataHora(LocalDateTime.now());
+        movimentacaoRepository.save(movimentacao);
+
+        return conta.getSaldo();
+        }
 
     // Realizar depósito com autenticação
-    @Transactional
-    public Double depositar(Long id, Double valor, String senha) {
-        if (valor == null || valor <= 0) {
-            throw new IllegalArgumentException("Valor inválido para depósito");
-        }
-
-        Conta conta = autenticarPorId(id, senha);
-
-        if (conta.getSaldo() == null) {
-            conta.setSaldo(0.0);
-        }
-
-        conta.setSaldo(conta.getSaldo() + valor);
-        return contaRepository.save(conta).getSaldo();
+  // Realizar depósito com autenticação
+@Transactional
+public Double depositar(Long id, Double valor, String senha) {
+    if (valor == null || valor <= 0) {
+        throw new IllegalArgumentException("Valor inválido para depósito");
     }
+
+    Conta conta = autenticarPorId(id, senha);
+
+    if (conta.getSaldo() == null) {
+        conta.setSaldo(0.0);
+    }
+
+    conta.setSaldo(conta.getSaldo() + valor);
+    contaRepository.save(conta);
+
+    // ✅ Inserir movimentação sem alterar a lógica principal
+    Movimentacao movimentacao = new Movimentacao();
+    movimentacao.setConta(conta);
+    movimentacao.setValor(valor);
+    movimentacao.setTipo("DEPOSITO");
+    movimentacao.setDataHora(LocalDateTime.now());
+    movimentacaoRepository.save(movimentacao);
+
+    return conta.getSaldo();
+}
 
     // Consultar saldo com autenticação
     public Conta consultarComSenha(Long id, String senha) {
         return autenticarPorId(id, senha);
     }
+
+    public List<Conta> listarTodasComTotais() {
+    List<Conta> contas = contaRepository.findAll();
+
+    for (Conta conta : contas) {
+        List<Movimentacao> movs = movimentacaoRepository.findByContaId(conta.getId());
+
+        double totalDepositos = movs.stream()
+            .filter(m -> "DEPOSITO".equals(m.getTipo()))
+            .mapToDouble(Movimentacao::getValor)
+            .sum();
+
+        double totalSaques = movs.stream()
+            .filter(m -> "SAQUE".equals(m.getTipo()))
+            .mapToDouble(Movimentacao::getValor)
+            .sum();
+
+        conta.setTotalDepositos(totalDepositos);
+        conta.setTotalSaques(totalSaques);
+    }
+
+    return contas;
 }
+
+}
+
+

@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
-import lombok.Data;
+import lombok.Data; // GERA GETTERS, SETTERS, EQUALS, HASHCODE, TOSTRING
 
 @Data
 @Entity
@@ -27,4 +27,11 @@ public class Conta {
 
     @Version
     private Long versao;
+
+    @Column(nullable = false)
+    private Double totalDepositos = 0.0;
+
+    @Column(nullable = false)
+    private Double totalSaques = 0.0;
+
 }
