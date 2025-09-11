@@ -100,7 +100,7 @@ public String consultar(@RequestParam Long consultaId,
 }
 
 
-    // 💰 Realizar depósito
+   // 💰 Realizar depósito
    @PostMapping("/depositar")
 public String depositar(@RequestParam Long depositoId,
                         @RequestParam Double valor,
@@ -115,8 +115,9 @@ public String depositar(@RequestParam Long depositoId,
     }
     return "index";
 }
-// 💸 Realizar saque
-@PostMapping("/sacar")
+
+    // 💸 Realizar saque
+    @PostMapping("/sacar")
 public String sacar(@RequestParam Long saqueId,
                     @RequestParam Double valor,
                     @RequestParam String senha,
