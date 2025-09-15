@@ -24,6 +24,7 @@ Este é um projeto Java com Spring Boot que simula um sistema de caixa eletrôni
 - Operações bancárias simuladas
 - Console H2 disponível em `/h2-console`
 - Configuração de porta personalizada (`10000`)
+- Gráficos das operações realizadas
 
 ---
 
