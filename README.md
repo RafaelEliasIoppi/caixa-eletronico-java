@@ -19,7 +19,7 @@ Este é um projeto Java com Spring Boot que simula um sistema de caixa eletrôni
 
 ## 🔐 Funcionalidades
 
-- Autenticação com login e senha
+- Autenticação com senha
 - Persistência de dados com H2 (`.mv.db` e `.trace.db`)
 - Operações bancárias simuladas
 - Console H2 disponível em `/h2-console`
