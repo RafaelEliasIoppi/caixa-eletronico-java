@@ -1,68 +1,190 @@
- body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 40px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
+/* Estilo geral inspirado em caixa eletrônico */
+body {
+  font-family: 'Courier New', monospace;
+  background-color: #1c1c1c;
+  color: #00ff99;
+  margin: 0;
+  padding: 20px;
+}
 
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
+/* Título principal */
+h1 {
+  text-align: center;
+  color: #00ff99;
+  font-size: 2em;
+  margin-bottom: 30px;
+  text-shadow: 0 0 5px #00ff99;
+}
 
-    .section {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
+/* Seções de operação */
+.section {
+  background-color: #000;
+  border: 2px solid #00ff99;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ff99;
+  margin: 0 auto 30px;
+  max-width: 800px;
+}
 
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
+/* Campos de entrada */
+input[type="number"],
+input[type="password"],
+input[type="text"] {
+  font-family: 'Courier New', monospace;
+  background-color: #1c1c1c;
+  color: #00ff99;
+  border: 1px solid #00ff99;
+  padding: 10px;
+  margin: 5px auto;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  display: block;
+}
 
-    button {
-      background-color: #3498db;
-      color: white;
-      cursor: pointer;
-    }
+/* Botões padrão */
+button {
+  font-family: 'Courier New', monospace;
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  cursor: pointer;
+}
 
-    button:hover {
-      background-color: #2980b9;
-    }
+/* Hover nos botões */
+button:hover {
+  background-color: #00cc88;
+}
 
-    .limpar {
-      background-color: #e74c3c;
-    }
+/* Botão de limpar */
+.limpar {
+  background-color: #ff3333;
+  color: white;
+}
 
-    .limpar:hover {
-      background-color: #c0392b;
-    }
+.limpar:hover {
+  background-color: #cc0000;
+}
 
-    .sucesso {
-      color: green;
-      margin-top: 10px;
-    }
+/* Mensagens de sucesso e erro */
+.sucesso {
+  color: #00ff99;
+  margin-top: 10px;
+}
 
-    .erro {
-      color: red;
-      margin-top: 10px;
-    }
+.erro {
+  color: #ff3333;
+  margin-top: 10px;
+}
 
-    .resultado {
-      margin-top: 10px;
-    
-    }
+.resultado {
+  margin-top: 10px;
+}
 
-    .mensagem-sucesso {
+/* Mensagem central */
+.mensagem-central {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #222;
+  border: 1px solid #00ff99;
+  border-radius: 8px;
+  color: #00ff99;
+  text-align: center;
+}
+
+/* Mensagem de sucesso destacada */
+.mensagem-sucesso {
   margin-top: 20px;
   padding: 15px;
   background-color: #e6ffed;
   border: 1px solid #2ecc71;
   border-radius: 8px;
   color: #2c3e50;
+}
+
+/* Tabela de contas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #00ff99;
+  text-align: center;
+  color: #00ff99;
+}
+
+/* Gráficos */
+.dashboard-graficos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.grafico-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Seção de todas as contas em tela cheia */
+.section.todas-contas {
+  max-width: none;
+  width: 100%;
+  padding: 20px;
+  margin: 0 auto 30px;
+  box-sizing: border-box;
+}
+
+/* Formulário de exclusão em linha dentro da tabela */
+td form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+/* Campo de senha compacto */
+td input[type="password"] {
+  width: 120px;
+  padding: 6px;
+  font-size: 0.9em;
+  background-color: #1c1c1c;
+  color: #00ff99;
+  border: 1px solid #00ff99;
+  border-radius: 4px;
+  margin: 0;
+}
+
+/* Botão de exclusão ao lado */
+td button {
+  padding: 6px 10px;
+  font-size: 0.9em;
+  background-color: #ff3333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0;
+}
+
+td button:hover {
+  background-color: #cc0000;
 }
