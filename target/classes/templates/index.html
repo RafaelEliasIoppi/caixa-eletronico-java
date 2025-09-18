@@ -175,44 +175,43 @@
   </div>
 
   <!-- Todas as Contas + Exclusão -->
-  <div class="section-todas as contas" th:if="${todasContas != null}">
-    <h2>📋 Todas as Contas</h2>
-    <p class="descricao">Visualização geral para fins didáticos e análise do sistema.</p>
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="background-color: #ecf0f1;">
-          <th style="padding: 8px; border: 1px solid #ccc;">ID</th>
-          <th style="padding: 8px; border: 1px solid #ccc;">Titular</th>
-          <th style="padding: 8px; border: 1px solid #ccc;">Saldo</th>
-          <th style="padding: 8px; border: 1px solid #ccc;">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="conta : ${todasContas}">
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.id}"></td>
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.titular}"></td>
-          <td style="padding: 8px; border: 1px solid #ccc;" th:text="${conta.saldo}"></td>
-          <td style="padding: 8px; border: 1px solid #ccc;">
-            <form th:action="@{/excluir}" method="post" style="display:inline;">
-              <input type="hidden" name="id" th:value="${conta.id}" />
-              <input type="password" name="senha" placeholder="Senha" required />
-              <button type="button"
-                      onclick="confirmarExclusao(this.form)"
-                      style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
-                🗑️ Excluir
-              </button>
-            </form>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div th:if="${mensagem != null}" class="mensagem-central">
-      <p th:text="${mensagem}"></p>
-    </div>
-    <div th:if="${erro != null}" class="mensagem-central" style="background-color: #e74c3c;">
-      <p th:text="${erro}"></p>
-    </div>
+ <div class="section todas-contas" th:if="${todasContas != null}">
+  <h2>📋 Todas as Contas</h2>
+  <p class="descricao">Visualização geral para fins didáticos e análise do sistema.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Titular</th>
+        <th>Saldo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="conta : ${todasContas}">
+        <td th:text="${conta.id}"></td>
+        <td th:text="${conta.titular}"></td>
+        <td th:text="${conta.saldo}"></td>
+        <td>
+          <form th:action="@{/excluir}" method="post">
+            <input type="hidden" name="id" th:value="${conta.id}" />
+            <input type="password" name="senha" placeholder="Senha" required />
+            <button type="button" onclick="confirmarExclusao(this.form)">🗑️ Excluir</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div th:if="${mensagem != null}" class="mensagem-central">
+    <p th:text="${mensagem}"></p>
   </div>
+
+  <div th:if="${erro != null}" class="mensagem-central erro">
+    <p th:text="${erro}"></p>
+  </div>
+</div>
 
   <!-- Dashboard Financeiro -->
   <div class="section" th:if="${todasContas != null}">

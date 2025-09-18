@@ -3,75 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <title>Caixa Eletrônico</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 40px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
+ <style>
+  body {
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 20px;
+  background-color: #1c1c1c;
+  color: #00ff99;
+}
 
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
+h1 {
+  text-align: center;
+  color: #00ff99;
+  font-size: 2em;
+  margin-bottom: 30px;
+  text-shadow: 0 0 5px #00ff99;
+}
 
-    .section {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
+.section {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ff99;
+  margin-bottom: 30px;
+  border: 2px solid #00ff99;
+}
 
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
+/* Campos de entrada */
+input[type="number"],
+input[type="password"],
+input[type="text"] {
+  font-family: 'Courier New', monospace;
+  background-color: #1c1c1c;
+  color: #00ff99;
+  border: 1px solid #00ff99;
+  padding: 10px;
+  margin: 5px auto;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  display: block;
+}
 
-    button {
-      background-color: #3498db;
-      color: white;
-      cursor: pointer;
-    }
+/* Botões padrão */
+button {
+  font-family: 'Courier New', monospace;
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  cursor: pointer;
+}
 
-    button:hover {
-      background-color: #2980b9;
-    }
+button:hover {
+  background-color: #00cc88;
+}
 
-    .limpar {
-      background-color: #e74c3c;
-    }
+/* Botão de limpar */
+.limpar {
+  background-color: #ff3333;
+  color: white;
+}
 
-    .limpar:hover {
-      background-color: #c0392b;
-    }
+.limpar:hover {
+  background-color: #cc0000;
+}
 
-    .sucesso {
-      color: green;
-      margin-top: 10px;
-    }
+/* Mensagens */
+.sucesso {
+  color: #00ff99;
+  margin-top: 10px;
+}
 
-    .erro {
-      color: red;
-      margin-top: 10px;
-    }
+.erro {
+  color: #ff3333;
+  margin-top: 10px;
+}
 
-    .resultado {
-      margin-top: 10px;
-    
-    }
+.resultado {
+  margin-top: 10px;
+}
 
-    .mensagem-sucesso {
+.mensagem-sucesso {
   margin-top: 20px;
   padding: 15px;
-  background-color: #e6ffed;
-  border: 1px solid #2ecc71;
+  background-color: #222;
+  border: 1px solid #00ff99;
   border-radius: 8px;
-  color: #2c3e50;
+  color: #00ff99;
+  text-align: center;
 }
+
+ </style>
   </style>
   <script>
   function limparResultados() {
